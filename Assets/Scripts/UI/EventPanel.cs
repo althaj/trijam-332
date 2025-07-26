@@ -12,7 +12,7 @@ public class EventPanel : MonoBehaviour
     [SerializeField] private EventButton buttonPrefab;
     [SerializeField] private string closeButtonText;
 
-    private EventButton[] eventButtons;
+    public EventButton[] EventButtons { get; private set; } = new EventButton[0];
 
     public UnityEvent<int> OnButtonClicked;
 
@@ -54,34 +54,34 @@ public class EventPanel : MonoBehaviour
             return;
         }
 
-        eventButtons = new EventButton[buttonNames.Length + 1];
+        EventButtons = new EventButton[buttonNames.Length + 1];
 
         for (int i = 0; i < buttonNames.Length; i++)
         {
-            eventButtons[i] = Instantiate(buttonPrefab, buttonsPanel);
-            if (eventButtons[i] != null)
+            EventButtons[i] = Instantiate(buttonPrefab, buttonsPanel);
+            if (EventButtons[i] != null)
             {
-                eventButtons[i].SetText(buttonNames[i]);
-                eventButtons[eventButtons.Length - 1].OnClicked.AddListener(() => OnButtonClicked?.Invoke(i));
+                EventButtons[i].SetText(buttonNames[i]);
+                EventButtons[i].OnClicked.AddListener(() => OnButtonClicked?.Invoke(i));
             }
         }
 
-        eventButtons[eventButtons.Length - 1] = Instantiate(buttonPrefab, buttonsPanel);
-        eventButtons[eventButtons.Length - 1].SetText(closeButtonText);
-        eventButtons[eventButtons.Length - 1].OnClicked.AddListener(ClosePanel);
+        EventButtons[EventButtons.Length - 1] = Instantiate(buttonPrefab, buttonsPanel);
+        EventButtons[EventButtons.Length - 1].SetText(closeButtonText);
+        EventButtons[EventButtons.Length - 1].OnClicked.AddListener(ClosePanel);
     }
 
     private void RemoveCurrentButtons()
     {
-        for (int i = 0; i < eventButtons.Length; i++)
+        for (int i = 0; i < EventButtons.Length; i++)
         {
-            if (eventButtons[i] == null)
+            if (EventButtons[i] == null)
             {
                 continue;
             }
 
-            eventButtons[i].OnClicked.RemoveAllListeners();
-            Destroy(eventButtons[i].gameObject);
+            EventButtons[i].OnClicked.RemoveAllListeners();
+            Destroy(EventButtons[i].gameObject);
         }
     }
 
