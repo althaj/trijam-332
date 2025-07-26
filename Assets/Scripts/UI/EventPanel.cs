@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,7 +19,7 @@ public class EventPanel : MonoBehaviour
 
     void Start()
     {
-        ClosePanel();       
+        ClosePanel(0);       
     }
 
     public void OpenPanel(string eventTitle, string eventDescription, string[] buttonNames)
@@ -54,7 +55,7 @@ public class EventPanel : MonoBehaviour
             return;
         }
 
-        EventButtons = new EventButton[buttonNames.Length + 1];
+        EventButtons = new EventButton[buttonNames.Length];
 
         for (int i = 0; i < buttonNames.Length; i++)
         {
@@ -62,13 +63,24 @@ public class EventPanel : MonoBehaviour
             if (EventButtons[i] != null)
             {
                 EventButtons[i].SetText(buttonNames[i]);
-                EventButtons[i].OnClicked.AddListener(() => OnButtonClicked?.Invoke(i));
+                EventButtons[i].SetButtonIndex(i);
+                EventButtons[i].OnClicked.AddListener(ButtonClicked);
+                EventButtons[i].OnClicked.AddListener(ClosePanel);
             }
         }
 
-        EventButtons[EventButtons.Length - 1] = Instantiate(buttonPrefab, buttonsPanel);
-        EventButtons[EventButtons.Length - 1].SetText(closeButtonText);
-        EventButtons[EventButtons.Length - 1].OnClicked.AddListener(ClosePanel);
+        if (buttonNames.Length == 0)
+        {
+            EventButtons = new EventButton[1];
+            EventButtons[EventButtons.Length - 1] = Instantiate(buttonPrefab, buttonsPanel);
+            EventButtons[EventButtons.Length - 1].SetText(closeButtonText);
+            EventButtons[EventButtons.Length - 1].OnClicked.AddListener(ClosePanel);
+        }
+    }
+
+    private void ButtonClicked(int index)
+    {
+        OnButtonClicked?.Invoke(index);
     }
 
     private void RemoveCurrentButtons()
@@ -85,7 +97,7 @@ public class EventPanel : MonoBehaviour
         }
     }
 
-    public void ClosePanel()
+    public void ClosePanel(int index)
     {
         if (background != null)
         {

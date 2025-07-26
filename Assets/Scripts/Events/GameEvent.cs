@@ -3,17 +3,17 @@ using UnityEngine.Events;
 
 public class GameEvent : MonoBehaviour
 {
-    [SerializeField] private string title;
-    [SerializeField] [TextArea(2, 5)] private string description;
-    [SerializeField] private string[] buttonNames;
-    [SerializeField] private UnityEvent[] buttonActions;
+    [SerializeField] protected string title;
+    [SerializeField] [TextArea(2, 5)] protected string description;
+    [SerializeField] protected string[] buttonNames;
+    [SerializeField] protected UnityEvent[] buttonActions;
 
     public virtual bool IsExecutable() => true;
 
-    public string GetTitle() => title;
-    public string GetDescription() => description;
-    public string[] GetButtonNames() => buttonNames;
-    public void ButtonClicked(int index)
+    public virtual string GetTitle() => title;
+    public virtual string GetDescription() => description;
+    public virtual string[] GetButtonNames() => buttonNames;
+    public virtual void ButtonClicked(int index)
     {
         if (buttonActions[index] != null)
         {

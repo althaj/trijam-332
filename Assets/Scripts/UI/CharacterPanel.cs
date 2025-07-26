@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,17 +11,18 @@ public class CharacterPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI bioText;
     [SerializeField] private TextMeshProUGUI abilityText;
+    [SerializeField] private RectTransform buttonsPanel;
 
     [SerializeField] private CharacterButton characterButtonPrefab;
 
-    public void Initialize(CharacterManager characterManager, Character[] characters)
+    public void Initialize(CharacterManager characterManager, List<Character> characters)
     {
         if (characterListPanel == null || characterButtonPrefab == null)
         {
             return;
         }
 
-        for (int i = 0; i < characters.Length; i++)
+        for (int i = 0; i < characters.Count; i++)
         {
             CharacterButton button = Instantiate(characterButtonPrefab, characterListPanel);
             if (button == null)
@@ -57,6 +60,11 @@ public class CharacterPanel : MonoBehaviour
         if (abilityText != null)
         {
             abilityText.text = character.GetAbilityText();
+        }
+
+        if (buttonsPanel != null)
+        {
+            buttonsPanel.gameObject.SetActive(character.CurrentActivity == Character.Activity.None);
         }
     }
 }

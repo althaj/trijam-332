@@ -6,7 +6,9 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class EventButton : MonoBehaviour
 {
-    public UnityEvent OnClicked;
+    public UnityEvent<int> OnClicked;
+
+    private int buttonIndex;
 
     public void SetText(string text)
     {
@@ -23,6 +25,11 @@ public class EventButton : MonoBehaviour
         }
 
         textMesh.text = text;
+    }
+
+    public void SetButtonIndex(int index)
+    {
+        buttonIndex = index;
     }
 
     void OnEnable()
@@ -49,6 +56,6 @@ public class EventButton : MonoBehaviour
 
     private void OnButtonClick()
     {
-        OnClicked?.Invoke();
+        OnClicked?.Invoke(buttonIndex);
     }
 }
